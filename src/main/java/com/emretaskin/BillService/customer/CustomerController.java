@@ -1,29 +1,38 @@
 package com.emretaskin.BillService.customer;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.OK;
+
 @RestController
 public class CustomerController {
 
-    @Autowired
-    private CustomerService customerService;
+
+    private final CustomerService customerService;
+
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
+    }
 
     @PostMapping("/customers")
-    public Customer saveCustomer (@RequestBody Customer customer){
-        return customerService.saveCustomer(customer);
+    public ResponseEntity<Customer> saveCustomer (@RequestBody Customer customer){
+        return new ResponseEntity<>(customerService.saveCustomer(customer), OK);
     }
 
     @GetMapping("/customers")
-    public List<Customer> fetchCustomerList(){
-        return customerService.fetchCustomerList();
+    public ResponseEntity<List<Customer>> fetchCustomerList(@RequestParam(value = "letter", required = false) String letter){
+        if (letter == null) {
+            return new ResponseEntity<>(customerService.fetchCustomerList(), OK);
+        }else{
+            return new ResponseEntity<>(customerService.getCustomersWithSpecificLetter(letter), OK);
+        }
     }
 
-
-    @GetMapping("/customers/{letter}")
-    public List<Customer> getCustomersWithSpecificLetter(@PathVariable String letter){
-        return customerService.getCustomersWithSpecificLetter(letter);
+    @GetMapping("/customers/lower")
+    public ResponseEntity<List<String>> fetchBillsGreaterThanAmount(@RequestParam(value = "amount", required = false) Integer amount){
+        return new ResponseEntity<>(customerService.fetchCustomersWithLowerAmountThanGivenAmount(amount),OK);
     }
 }

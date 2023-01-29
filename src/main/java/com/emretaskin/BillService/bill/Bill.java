@@ -1,33 +1,51 @@
 package com.emretaskin.BillService.bill;
 
-import jakarta.persistence.Entity;
+import com.emretaskin.BillService.customer.Customer;
+import jakarta.persistence.*;
+
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Table(name = "Bill")
 public class Bill {
 
-    private Long customerId;
-    private int amount;
+    @Id
+    private Long billId;
+    private Integer amount;
     private String department;
+    private String company;
+    private java.sql.Date billCreatedAt;
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
-    public Bill(Long customerId, int amount, String department) {
-        this.customerId = customerId;
+    public Bill(Long billId, Integer amount, String department, String company, Date billCreatedAt, Customer customer) {
+        this.billId = billId;
         this.amount = amount;
         this.department = department;
+        this.company = company;
+        this.billCreatedAt = billCreatedAt;
+        this.customer = customer;
     }
 
-    public Long getCustomerId() {
-        return customerId;
+    public Bill() {
     }
 
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
+    public Long getBillId() {
+        return billId;
     }
 
-    public int getAmount() {
+    public void setBillId(Long billId) {
+        this.billId = billId;
+    }
+
+    public Integer getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(Integer amount) {
         this.amount = amount;
     }
 
@@ -39,12 +57,39 @@ public class Bill {
         this.department = department;
     }
 
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public Date getBillCreatedAt() {
+        return billCreatedAt;
+    }
+
+    public void setBillCreatedAt(Date billCreatedAt) {
+        this.billCreatedAt = billCreatedAt;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
     @Override
     public String toString() {
         return "Bill{" +
-                "customerId=" + customerId +
+                "billId='" + billId + '\'' +
                 ", amount=" + amount +
                 ", department='" + department + '\'' +
+                ", company='" + company + '\'' +
+                ", billCreatedAt=" + billCreatedAt +
+                ", customer=" + customer +
                 '}';
     }
 }

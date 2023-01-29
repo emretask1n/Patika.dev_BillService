@@ -1,11 +1,14 @@
 package com.emretaskin.BillService.customer;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import com.emretaskin.BillService.bill.Bill;
+import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Table(name = "Customer")
 public class Customer {
 
     @Id
@@ -13,6 +16,11 @@ public class Customer {
     private String customerName;
     private String customerSurname;
     private java.sql.Date createdAt;
+    @OneToMany(
+            mappedBy = "customer",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<Bill> bills = new ArrayList<>();
 
     public Long getCustomerId() {
         return customerId;
@@ -64,5 +72,9 @@ public class Customer {
     }
 
     public Customer() {
+    }
+
+    public void setBills(List<Bill> bills) {
+        this.bills = bills;
     }
 }

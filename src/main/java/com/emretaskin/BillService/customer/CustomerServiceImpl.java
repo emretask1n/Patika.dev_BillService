@@ -1,6 +1,5 @@
 package com.emretaskin.BillService.customer;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -8,8 +7,13 @@ import java.util.List;
 @Service
 public class CustomerServiceImpl implements CustomerService{
 
-    @Autowired
-    private CustomerRepository customerRepository;
+
+    private final CustomerRepository customerRepository;
+
+    public CustomerServiceImpl(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
+
     @Override
     public Customer saveCustomer(Customer customer) {
         return customerRepository.save(customer);
@@ -20,10 +24,17 @@ public class CustomerServiceImpl implements CustomerService{
         return customerRepository.findAll();
     }
 
-
     @Override
     public List<Customer> getCustomersWithSpecificLetter(String letter) {
-        return customerRepository.findByContentContains(letter);
+        return customerRepository.findByLetterContains(letter);
     }
+
+    @Override
+    public List<String> fetchCustomersWithLowerAmountThanGivenAmount(Integer amount) {
+        if (amount==null){
+            return customerRepository.findListOfCustomersWithAmounts();
+        }else {
+            return customerRepository.findListOfCustomersWhoHasLessTotalAmountThanGivenAmount(amount);
+        }    }
 
 }

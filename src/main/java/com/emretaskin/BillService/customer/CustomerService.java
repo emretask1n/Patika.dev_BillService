@@ -7,6 +7,7 @@ public interface CustomerService {
 
     List<Customer> fetchCustomerList();
 
-
     List<Customer> getCustomersWithSpecificLetter(String letter);
+
+    List<String> fetchCustomersWithLowerAmountThanGivenAmount(Integer amount);
 }
